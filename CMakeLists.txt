@@ -202,6 +202,7 @@ set(CMAKE_CUDA_FLAGS_RELEASE "${CMAKE_CUDA_FLAGS_RELEASE} --use_fast_math")
 message("CMAKE_CUDA_FLAGS_RELEASE: ${CMAKE_CUDA_FLAGS_RELEASE}")
 endif()
 
+
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -290,8 +291,50 @@ if(USE_TRITONSERVER_DATATYPE)
   list(APPEND COMMON_HEADER_DIRS ${PROJECT_SOURCE_DIR}/../repo-core-src/include)
 endif()
 
+include(FetchContent)
+FetchContent_Declare(
+  concurrentqueue
+  GIT_REPOSITORY https://github.com/cameron314/concurrentqueue.git
+  GIT_TAG v1.0.3
+)
+FetchContent_MakeAvailable(concurrentqueue)
+
+FetchContent_Declare(
+  abseil-cpp
+  GIT_REPOSITORY https://github.com/abseil/abseil-cpp.git
+  GIT_TAG 20230125.2
+)
+FetchContent_MakeAvailable(abseil-cpp)
+
+FetchContent_Declare(
+  fmt
+  GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+  GIT_TAG 9.1.0
+)
+FetchContent_MakeAvailable(fmt)
+
+FetchContent_Declare(
+  spdlog
+  GIT_REPOSITORY https://github.com/gabime/spdlog.git
+  GIT_TAG v1.11.0
+)
+FetchContent_MakeAvailable(spdlog)
+SET(SPDLOG_FMT_EXTERNAL ON CACHE BOOL "Build spdlog with fmt")
+
+FetchContent_Declare(
+  sentencepiece
+  GIT_REPOSITORY https://github.com/google/sentencepiece.git
+  GIT_TAG v0.1.99
+)
+FetchContent_MakeAvailable(sentencepiece)
+
+
 include_directories(
   ${COMMON_HEADER_DIRS}
+  ${concurrentqueue_SOURCE_DIR}
+  ${abseil-cpp_SOURCE_DIR}
+  ${spdlog_SOURCE_DIR}/include
+  ${fmt_SOURCE_DIR}/include
 )
 
 link_directories(
